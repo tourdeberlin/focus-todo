@@ -2,6 +2,7 @@
 const FocusPage = () => {
   return (
     <div>
+      Focus
     </div>
   )
 }
