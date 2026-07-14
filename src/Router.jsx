@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import TasksPage from "./pages/TasksPage";
-import FocusPage from "./pages/FocusPage";
-import StatsPage from "./pages/StatsPage";
-import SettingsPage from "./pages/SettingsPage";
+import TasksPage from "./pages/Tasks/TasksPage";
+import FocusPage from "./pages/Focus/FocusPage";
+import StatsPage from "./pages/Stats/StatsPage";
+import SettingsPage from "./pages/Settings/SettingsPage";
 import Layout from "./components/Layout";
 
 const MainRoutes = () => {

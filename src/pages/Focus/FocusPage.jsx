@@ -1,7 +1,7 @@
 
 const FocusPage = () => {
   return (
-    <div>
+    <div className="flex flex-col items-center ">
       Focus
     </div>
   )

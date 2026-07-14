@@ -1,14 +1,10 @@
-const Input = ({ type, placeholder }) => {
+const Input = ({ label, ...props }) => {
   return (
-    <div className="border border-neutral-950/10 rounded-lg flex-1 bg-neutral-300">
-      <input
-        className="w-full pl-2 py-1 outline-none text-sm"
-        type={type}
-        placeholder={placeholder}
-      />
+    <div className="flex-1 rounded-lg bg-neutral-200">
+      {label && <label className="text-sm">{label}</label>}
+      <input className="w-full pl-3 py-2 text-sm " {...props} />
     </div>
   );
 };
 
 export default Input;
-    

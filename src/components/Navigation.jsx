@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 const Navigation = () => {
   return (
-    <div className="flex rounded-[14px] justify-center items-center bg-neutral-300 w-md h-9">
+    <div className="flex rounded-[14px] justify-center items-center bg-neutral-200 w-md h-9">
       <NavLink
         to="/"
         className={({ isActive }) =>
@@ -14,7 +14,7 @@ const Navigation = () => {
           )
         }
       >
-        <ListTodo />
+        <ListTodo className="w-5 h-5" />
       </NavLink>
       <NavLink
         to="focus"
@@ -25,7 +25,7 @@ const Navigation = () => {
           )
         }
       >
-        <Brain />
+        <Brain className="w-5 h-5" />
       </NavLink>
       <NavLink
         to="stats"
@@ -36,7 +36,7 @@ const Navigation = () => {
           )
         }
       >
-        <ChartColumn />
+        <ChartColumn className="w-5 h-5" />
       </NavLink>
       <NavLink
         to="settings"
@@ -47,7 +47,7 @@ const Navigation = () => {
           )
         }
       >
-        <Settings />
+        <Settings className="w-5 h-5" />
       </NavLink>
     </div>
   );
