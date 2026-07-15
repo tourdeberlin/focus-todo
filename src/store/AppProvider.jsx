@@ -13,7 +13,6 @@ export function AppProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-    console.log(localStorage);
   }, [tasks]);
 
   return <AppContext value={{ tasks, tasksDispatch }}>{children}</AppContext>;
