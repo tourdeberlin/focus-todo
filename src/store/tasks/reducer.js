@@ -13,7 +13,11 @@ export function tasksReducer(tasks, action) {
     case "TASK_EDIT": {
       return tasks.map((task) => {
         if (task.id === action.id) {
-          return { ...task, title: action.title, description: action.description };
+          return {
+            ...task,
+            title: action.title,
+            description: action.description,
+          };
         } else {
           return task;
         }
@@ -21,9 +25,7 @@ export function tasksReducer(tasks, action) {
     }
     case "TASK_TOGGLE": {
       return tasks.map((task) =>
-        task.id === action.id
-          ? { ...task, completed: !task.completed }
-          : task,
+        task.id === action.id ? { ...task, completed: !task.completed } : task,
       );
     }
     case "TASK_DELETE": {

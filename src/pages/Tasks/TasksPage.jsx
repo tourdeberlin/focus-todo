@@ -4,6 +4,7 @@ import NewTaskForm from "./NewTaskForm";
 import TasksList from "./TasksList";
 import EditTaskModal from "./EditTaskModal";
 import useTasks from "../../hooks/useTasks";
+import EmptyState from "../../components/ui/EmptyState";
 
 const FILTERS = {
   all: "all",
@@ -12,7 +13,7 @@ const FILTERS = {
 };
 
 const TasksPage = () => {
-  const { tasks, tasksDispatch } = useTasks();
+  const { tasks, tasksDispatch, setCurrentTaskId } = useTasks();
   const [inputValue, setInputValue] = useState("");
   const [edidtingTaskId, setEditingTaskId] = useState(null);
   const [filter, setFilter] = useState(FILTERS.all);
@@ -64,7 +65,6 @@ const TasksPage = () => {
   };
 
   const handleSave = (updatedTask) => {
-    console.log(updatedTask);
     tasksDispatch({
       type: "TASK_EDIT",
       ...updatedTask,
@@ -72,8 +72,8 @@ const TasksPage = () => {
     setEditingTaskId(null);
   };
 
-  const handleCancel = () => {
-    setEditingTaskId(null);
+  const handleSelectTask = (taskId) => {
+    setCurrentTaskId(taskId);
   };
 
   return (
@@ -107,20 +107,21 @@ const TasksPage = () => {
       </div>
 
       {tasks.length === 0 ? (
-        <div className="text-neutral-500">Нет задач</div>
+        <EmptyState title="Нет задач" />
       ) : (
         <TasksList
           tasks={filteredTasks}
           onToggle={toggleTask}
           onDelete={handleDeleteTask}
-          onEdit={(taskId) => handleEditTask(taskId)}
+          onEdit={handleEditTask}
+          onSelect={handleSelectTask}
         />
       )}
       {editingTask && (
         <EditTaskModal
           key={editingTask.id}
           task={editingTask}
-          onClose={handleCancel}
+          onClose={() => setEditingTaskId(null)}
           onSave={handleSave}
         />
       )}

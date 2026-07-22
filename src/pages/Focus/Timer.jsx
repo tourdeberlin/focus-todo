@@ -1,55 +1,69 @@
-import { useState, useRef } from "react";
-import Button from "../../components/ui/Button";
-import { RotateCcw, Play, Pause } from "lucide-react";
+import { useRef, useEffect } from "react";
+import TimerControls from "./TimerControls";
+import useHistory from "../../hooks/useHistory";
+import useTasks from "../../hooks/useTasks";
+import useTimer from "../../hooks/useTimer";
 
-const initialTime = 25 * 60;
+const formatTime = (seconds) => {
+  const minutes = String(Math.floor(seconds / 60));
+  const remainingSec = String(seconds % 60);
+  return `${minutes.padStart(2, 0)}:${remainingSec.padStart(2, 0)}`;
+};
 
-const Timer = () => {
-  const [time, setTime] = useState(initialTime);
-  const [isRunning, setIsRunning] = useState(false);
+const Timer = ({ disabled }) => {
+  const { timer, timerDispatch } = useTimer();
+
+  const { history, historyDispatch } = useHistory();
+  const { currentTaskId } = useTasks();
   const timerRef = useRef(null);
 
+  const currentTask = history.find((task) => task.id === currentTaskId);
+
+  useEffect(() => {
+    if (timer.timeLeft !== 0) return;
+
+    clearInterval(timerRef.current);
+
+    // historyDispatch({
+    //   type: "SESSION_ADD",
+    //   session: history,
+    //   task: currentTask.title,
+    //   time: Date.now(),
+    //   duration: timer.timeLeft,
+    // });
+  }, [timer, currentTask, timerDispatch]);
+
+  useEffect(() => {
+    if (timer.status !== "running") return;
+
+    timerRef.current = setInterval(() => {
+      timerDispatch({ type: "TICK" });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, [timer.status, timerDispatch]);
+
   const handleStartStop = () => {
-    if (isRunning) {
-      clearInterval(timerRef.current);
-      setIsRunning(false);
-    } else {
-      setIsRunning(true);
-      timerRef.current = setInterval(() => setTime((prev) => prev - 1), 1000);
-    }
+    if (disabled) return;
+
+    timerDispatch({ type: "START_STOP" });
   };
 
   const handleRestart = () => {
     clearInterval(timerRef.current);
-    setIsRunning(false);
-    setTime(initialTime);
-  };
-
-  const formatTime = (seconds) => {
-    const minutes = String(Math.floor(seconds / 60));
-    const remainingSec = String(seconds % 60);
-    return `${minutes.padStart(2, 0)}:${remainingSec.padStart(2, 0)}`;
+    timerDispatch({ type: "RESET" });
+    // setTime(initialTime);
   };
 
   return (
     <div className="flex flex-col mt-8">
-      <p className="text-8xl tracking-wider">{formatTime(time)}</p>
-      <div className="flex gap-3 justify-center mt-5">
-        <Button variant="colored" onClick={handleStartStop}>
-          {isRunning ? (
-            <span className="flex gap-2 items-center">
-              <Pause className="h-4 w-4" /> Пауза
-            </span>
-          ) : (
-            <span className="flex gap-2 items-center">
-              <Play className="h-4 w-4" /> Старт
-            </span>
-          )}
-        </Button>
-        <Button variant="bordered" onClick={handleRestart}>
-          <RotateCcw />
-        </Button>
-      </div>
+      <p className="text-8xl tracking-wider">{formatTime(timer.timeLeft)}</p>
+      <TimerControls
+        isRunning={timer.status === "running"}
+        handleStartStop={handleStartStop}
+        handleRestart={handleRestart}
+      />
+      {disabled && <p className="text-red-800 text-xl">Выберите задачу</p>}
     </div>
   );
 };
