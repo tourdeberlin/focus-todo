@@ -17,12 +17,23 @@ const FocusPage = () => {
 
   return (
     <div className="flex flex-col w-full items-center px-4 py-8">
-      <h2 className="text-2xl pb-6 text-left">{ timer.mode === "focus" ? 'Фокус-сессия' : timer.mode === 'shortBreak' ? 'Короткий перерыв' : 'Длинный перерыв'}</h2>
-      {currentTask && <p className="text-neutral-500">{currentTask.title}</p>}
+      <h2 className="text-2xl pb-6 text-left">
+        {timer.mode === "focus"
+          ? "Фокус-сессия"
+          : timer.mode === "shortBreak"
+            ? "Короткий перерыв"
+            : "Длинный перерыв"}
+      </h2>
+      {currentTask && (
+        <div>
+          <p>{currentTask.title}</p>
+          <p className="text-neutral-500">{currentTask.description}</p>
+        </div>
+      )}
       {!currentTask && (
         <Select
           tasks={tasks}
-          value={currentTaskId}
+          value={currentTaskId ?? ""}
           onChange={handleChangeSelect}
         />
       )}

@@ -1,10 +1,16 @@
-import { useContext } from "react";
+import {  useContext } from "react";
 import { AppContext } from "../store/AppContext";
 
 export default function useSettings() {
-  const { settings, settingsDispatch } = useContext(AppContext);
+  const context = useContext(AppContext);
+
+  if (!context) {
+    throw new Error("useSettings must be used inside a AppProvider");
+  }
+
   return {
-    settings,
-    settingsDispatch,
+    settings: context.settings,
+    settingsDispatch: context.settingsDispatch,
   };
+
 }

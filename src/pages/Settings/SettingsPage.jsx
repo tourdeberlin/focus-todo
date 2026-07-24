@@ -11,6 +11,7 @@ const SettingsPage = () => {
       key,
       value,
     });
+
   };
 
   return (

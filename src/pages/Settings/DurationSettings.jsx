@@ -8,18 +8,21 @@ const DurationSettings = ({ settings, onChange }) => {
         <Input
           label="Фокус"
           type="number"
+          min="1"
           value={settings.focusDuration}
           onChange={(e) => onChange("focusDuration", e.target.value)}
         />
         <Input
           label="Перерыв"
           type="number"
+          min="1"
           value={settings.shortBreakDuration}
           onChange={(e) => onChange("shortBreakDuration", e.target.value)}
         />
         <Input
           label="Длинный"
           type="number"
+          min="1"
           value={settings.longBreakDuration}
           onChange={(e) => onChange("longBreakDuration", e.target.value)}
         />
@@ -29,6 +32,7 @@ const DurationSettings = ({ settings, onChange }) => {
         <input
           type="number"
           className="w-20 h-9 bg-neutral-200 rounded-lg pl-3"
+          min="2"
           value={settings.sessionsBeforeLongBreak}
           onChange={(e) => onChange("sessionsBeforeLongBreak", e.target.value)}
         />

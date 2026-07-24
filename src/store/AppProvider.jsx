@@ -3,7 +3,7 @@ import { AppContext } from "./AppContext";
 import { tasksReducer } from "./tasks/reducer";
 import { historyReducer } from "./history/reducer";
 import { settingsReducer, initialSettigs } from "./settings/reducer";
-import { timerReducer, initialTimer } from "./timer/reducer";
+import { timerReducer } from "./timer/reducer";
 
 function loadFromStorage(key, defaultValue) {
   const saved = localStorage.getItem(key);
@@ -26,12 +26,19 @@ export function AppProvider({ children }) {
     initialSettigs,
     (init) => loadFromStorage("settings", init),
   );
-
-  const [timer, timerDispatch] = useReducer(timerReducer, initialTimer);
-
   const [currentTaskId, setCurrentTaskId] = useState(() =>
-    loadFromStorage("currentTaskId", null),
+    loadFromStorage("currentTaskId", ""),
   );
+
+  const initialTimer = {
+    mode: "focus",
+    status: "idle",
+    currentTaskId,
+    timeLeft: settings.focusDuration * 60,
+    completedFocusSessions: 0,
+  };
+  
+  const [timer, timerDispatch] = useReducer(timerReducer, initialTimer);
 
   useEffect(() => {
     saveToStorage("tasks", tasks);

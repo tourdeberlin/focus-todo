@@ -1,9 +1,38 @@
-export const initialTimer = {
-  mode: "focus",
-  status: "idle",
-  currentTaskId: null,
-  timeLeft: 0.5 * 60,
-};
+function getNextPhase(timer, settings) {
+  if (timer.mode === "focus") {
+    const completed = timer.completedFocusSessions + 1;
+    const mode =
+      completed % settings.sessionsBeforeLongBreak === 0
+        ? "longBreak"
+        : "shortBreak";
+    const timeLeft =
+      mode === "longBreak"
+        ? settings.longBreakDuration * 60
+        : settings.shortBreakDuration * 60;
+
+    return {
+      ...timer,
+      completedFocusSessions: completed,
+      mode,
+      timeLeft,
+      status: settings.autoBreakStart ? "running" : "idle",
+    };
+  } else if (timer.mode === "shortBreak") {
+    return {
+      ...timer,
+      mode: "focus",
+      timeLeft: settings.focusDuration * 60,
+      status: settings.autoFocusStart ? "running" : "idle",
+    };
+  } else {
+    return {
+      ...timer,
+      mode: "focus",
+      timeLeft: settings.focusDuration * 60,
+      status: settings.autoFocusStart ? "running" : "idle",
+    };
+  }
+}
 
 export function timerReducer(timer, action) {
   switch (action.type) {
@@ -21,10 +50,11 @@ export function timerReducer(timer, action) {
       }
       break;
     }
-    case "RESET": {
+    case "RESTART": {
       return {
         ...timer,
-        status: "idle",
+        timeLeft: action.duration,
+        status: 'idle'
       };
     }
     case "TICK": {
@@ -41,11 +71,25 @@ export function timerReducer(timer, action) {
         timeLeft: timer.timeLeft - 1,
       };
     }
-    case 'CHANGE_MODE': {
+    case "FINISH": {
       return {
         ...timer,
-        mode: action.mode
-      }
+        status: "idle",
+        timeLeft: 0,
+      };
+    }
+
+    case "NEXT_PHASE": {
+      const { settings } = action;
+      const nextPhase = getNextPhase(timer, settings);
+      return {
+        ...timer,
+        ...nextPhase,
+      };
+    }
+
+    default: {
+      throw new Error("Uknown action" + action.type);
     }
   }
 }

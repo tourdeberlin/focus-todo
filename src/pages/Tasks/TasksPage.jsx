@@ -13,7 +13,7 @@ const FILTERS = {
 };
 
 const TasksPage = () => {
-  const { tasks, tasksDispatch, setCurrentTaskId } = useTasks();
+  const { tasks, tasksDispatch, currentTaskId, setCurrentTaskId } = useTasks();
   const [inputValue, setInputValue] = useState("");
   const [edidtingTaskId, setEditingTaskId] = useState(null);
   const [filter, setFilter] = useState(FILTERS.all);
@@ -58,6 +58,7 @@ const TasksPage = () => {
       type: "TASK_DELETE",
       id: taskId,
     });
+    if (taskId === currentTaskId) setCurrentTaskId("");
   };
 
   const handleEditTask = (taskId) => {

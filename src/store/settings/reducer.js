@@ -9,12 +9,15 @@ export const initialSettigs = {
 };
 
 export function settingsReducer(settings, action) {
-  switch (action.type) {
+    switch (action.type) {
     case "SET_SETTING": {
       return {
         ...settings,
         [action.key]: action.value,
       };
+    }
+    default: {
+      throw new Error("Uknown action" + action.type);
     }
   }
 }

@@ -4,8 +4,8 @@ const Select = ({ tasks, value, onChange }) => {
   return (
     <form className="flex flex-col text-neutral-500">
       {tasks.length > 0 ? (
-        <select value={value} onChange={onChange}>
-          <option value="title">Выберите задачу</option>
+        <select value={value ?? ''} onChange={onChange}>
+          <option value="">Выберите задачу</option>
           {tasks.map((task) => (
             <option key={task.id} value={task.id}>
               {task.title}
